@@ -1,30 +1,38 @@
-var express = require('express'),
-	request = require('request'),
-	ejs = require('ejs'),
+var express = require("express"),
+	request = require("request"),
+	ejs = require("ejs"),
 	app = express(),
-	http = require('http').Server(app),
-	io = require('socket.io')(http)
-	port = process.env.PORT || 8080;
+	http = require("http").Server(app),
+	io = require("socket.io")(http)
+	port = process.env.PORT || 8080,
+	player = 0,
+	firstPlayerTurn = true;
 
-app.engine('html', ejs.renderFile);
-app.set('views', __dirname + '/templates');
-app.use(express.static(__dirname + '/static'));
+app.engine("html", ejs.renderFile);
+app.set("views", __dirname + "/templates");
+app.use(express.static(__dirname + "/static"));
 
-app.get('/', function(req, res){
-  res.render('index.html');
+app.get("/", function(req, res){
+  res.render("index.html");
 });
 
-io.on('connection', function(socket) {
-	console.log('a user connected');
-	socket.on('disconnect', function() {
-		console.log('user disconnected');
+io.on("connection", function(socket) {
+	console.log("a user connected");
+	io.emit("player", player);
+	player = player + 1;
+	socket.on("disconnect", function() {
+		console.log("user disconnected");
 	});
-	socket.on('selection', function(squareLoc) {
-		io.emit('selection', squareLoc);
+	socket.on("selection", function(squareLoc) {
+		io.emit("selection", squareLoc, firstPlayerTurn);
+		firstPlayerTurn = !firstPlayerTurn;
 	});
+	socket.on("start", function() {
+		io.emit("start");
+	})
 });
 
 var server = http.listen(port, function() {
 	var port = server.address().port;
-  	console.log('listening on port %s', port);
+  	console.log("listening on port %s", port);
 });
