@@ -3,10 +3,10 @@ var express = require("express"),
 	ejs = require("ejs"),
 	app = express(),
 	http = require("http").Server(app),
-	io = require("socket.io")(http)
+	io = require("socket.io")(http),
 	port = process.env.PORT || 8080,
-	player = 0,
-	firstPlayerTurn = true;
+	redis = require("redis"),
+	player = 0;
 
 app.engine("html", ejs.renderFile);
 app.set("views", __dirname + "/templates");
@@ -24,12 +24,15 @@ io.on("connection", function(socket) {
 		console.log("user disconnected");
 	});
 	socket.on("selection", function(squareLoc) {
-		io.emit("selection", squareLoc, firstPlayerTurn);
-		firstPlayerTurn = !firstPlayerTurn;
+		io.emit("selection", squareLoc);
+	});
+	socket.on("end", function() {
+		player = 0;
 	});
 	socket.on("start", function() {
 		io.emit("start");
-	})
+	});
+
 });
 
 var server = http.listen(port, function() {

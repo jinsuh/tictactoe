@@ -1,21 +1,22 @@
 // 0 1 2
 // 3 4 5
 // 6 7 8
-var size = 3;
-var board = new Array(size);
+var	player = null,
+	socket = io(),
+	firstPlayerTurn = true,
+	moveCount = 0,
+	size = 3,
+	board = new Array(size);
 for (var i = 0; i < size; i++) {
 	board[i] = new Array(size);
 }
-var isFirstPlayer = true,
-	player = null,
-	socket = io();
 
 const SPECTATOR = "Spectating";
 const WAITING = "Waiting for player's move...";
 const MYTURN = "Make your move!";
 
 socket.on("player", function(playerCount) {
-	state = document.getElementById("status");
+	var state = document.getElementById("status");
 	if (player == null) {
 		player = playerCount;
 		if (player == 1) {
@@ -30,19 +31,14 @@ socket.on("player", function(playerCount) {
 
 socket.on("start", function() {
 	var state = document.getElementById("status");
-	if (player == 0) {
-		state.innerHTML = MYTURN;
-		clickGrid(true);
-	}
-	else if (player == 1){
-		state.innerHTML = WAITING;
-		clickGrid(false);
-	}
+	stateSwitch();
 });
 
-socket.on("selection", function(squareLoc, firstPlayerTurn){
+socket.on("selection", function(squareLoc){
+	moveCount = moveCount + 1;
     var id = squareLoc[0] * 3 + squareLoc[1];
-    console.log(id.toString());
+    console.log(moveCount);
+    console.log(size * size);
     var square = document.getElementById(id.toString());
     if (firstPlayerTurn) {
     	var icon = "X";
@@ -53,12 +49,27 @@ socket.on("selection", function(squareLoc, firstPlayerTurn){
     square.innerHTML = icon;
     $(square).data("clicked", true);
     board[squareLoc[0]][squareLoc[1]] = firstPlayerTurn;
+    var endGameText = document.getElementById("endgame");
     if (checkWinner(squareLoc, firstPlayerTurn)) {
-
+    	
+    	if (firstPlayerTurn) {
+    		endGameText.innerHTML = "Player 1 wins!";
+    	}
+    	else {
+    		endGameText.innerHTML = "Player 2 wins!";
+    	}
+    	$(".overlay").addClass("overlay-open");
+    	socket.emit("end");
+    }
+    else if (moveCount >= (size * size)) {
+    	endGameText.innerHTML = "Cat's Game!";
+    	$(".overlay").addClass("overlay-open");
+    	socket.emit("end");
     }
     else {
     	var state = document.getElementById("status");
-    	stateSwitch(!firstPlayerTurn);
+    	firstPlayerTurn = !firstPlayerTurn;
+    	stateSwitch();
     }
 });
 
@@ -87,14 +98,12 @@ function checkWinner(squareLoc, player) {
 	// row
 	for (var i = 0; i < size && board[x][i] == player; i++) {
 		if (i == size - 1) {
-			console.log("WINNER row: " + player);
 			return true;
 		}
 	}
 	// column
 	for (var i = 0; i < size && board[i][y] == player; i++) {
 		if (i == size - 1) {
-			console.log("WINNER column: " + player);
 			return true;
 		}
 	}
@@ -102,7 +111,6 @@ function checkWinner(squareLoc, player) {
 	if (x == y) {
 		for (var i = 0; i < size && board[i][i] == player; i++) {
 			if (i == size - 1) {
-				console.log("WINNER diag: " + player);
 				return true;
 			}
 		}
@@ -110,11 +118,9 @@ function checkWinner(squareLoc, player) {
 	// other diagonal
 	for (var i = 0; i < size && board[i][(size-1)-i] == player; i++) {
     	if (i == size - 1) {
-    		console.log("WINNER: " + player);
     		return true;
     	}
     }
-
     return false;
 }
 
@@ -131,7 +137,8 @@ function clickGrid(enableClick) {
   	}
 }
 
-function stateSwitch(firstPlayerTurn) {
+function stateSwitch() {
+	var state = document.getElementById("status");
 	if (firstPlayerTurn) {
 		if (player == 0) {
 			state.innerHTML = MYTURN;
@@ -152,6 +159,5 @@ function stateSwitch(firstPlayerTurn) {
 			clickGrid(false);
 		}
 	}
-	
 }
 
