@@ -59,7 +59,9 @@ socket.on("selection", function(squareLoc){
     		endGameText.innerHTML = "Player 2 wins!";
     	}
     	$(".overlay").addClass("overlay-open");
-    	socket.emit("end");
+    	if (player == 0) {
+    		socket.emit("end");	
+    	}
     }
     else if (moveCount >= (size * size)) {
     	endGameText.innerHTML = "Cat's Game!";
@@ -159,5 +161,9 @@ function stateSwitch() {
 			clickGrid(false);
 		}
 	}
+}
+
+function toHistory() {
+	window.location.href="history";
 }
 

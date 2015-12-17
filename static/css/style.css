@@ -46,3 +46,9 @@
   height: 60%;
   font-size: 80px;
 }
+
+#history {
+	position: fixed;
+	top: 0%;
+	left: 80%;
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Previous Matches</title>
+
+		<link href="./css/styleHistory.css" type="text/css" rel="stylesheet"/>
+		<link href="./css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+	</head>
+	<body>
+		<!-- Static navbar -->
+	    <nav class="navbar navbar-inverse navbar-static-top">
+	      <div class="container-fluid">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="/">Tic Tac Toe</a>
+	        </div>
+	        <div id="navbar" class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav navbar-right">
+	            <li><a href="/">Home</a></li>
+	            <li class="active"><a href="history">History</a></li>
+	          </ul>
+	        </div>
+	      </div>
+	    </nav>
+
+	    <div class="container-fluid" id="wrapper">
+		    <div id="sidebar-wrapper">
+	            <ul class="sidebar-nav" id="game-list">
+	                <li>Dashboard</li>
+	                <li>Shortcuts</li>
+	            </ul>
+	        </div>
+			         <!-- Page Content -->
+	        <div id="page-content-wrapper">
+			    <h1 class="page-header" id="game-title">Dashboard</h1>
+		    	<div class="row">
+			       	<div class="centered" id="row1">
+				        <div class="square" id="0"></div>
+				        <div class="square" id="1"></div>
+				        <div class="square" id="2"></div>
+				    </div>
+				</div>
+				<div class="row">
+					<div class="centered" id="row2">
+				        <div class="square" id="3"></div>
+				        <div class="square v h" id="4"></div>
+				        <div class="square h" id="5"></div>
+					</div>
+				</div>
+				<div class="row">
+				    <div class="centered" id="row3">
+				        <div class="square" id="6"></div>
+				        <div class="square v" id="7"></div>
+				        <div class="square" id="8"></div>
+				    </div>
+				</div>
+				<div class="row">
+					<button class="btn btn-default btn-lg" type="button" id="left-button" >
+  						<span class="glyphicon glyphicon-triangle-left"></span>
+					</button>
+					<button class="btn btn-default btn-lg" type="button" id="right-button">
+						<span class="glyphicon glyphicon-triangle-right"></span>
+					</button>
+				</div>
+				
+			</div>
+		</div>
+
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	  	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
+		<script src="./js/getList.js"></script>
+	</body>
+</html>
