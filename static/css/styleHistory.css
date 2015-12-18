@@ -2,6 +2,8 @@
     float: left;
     width: 100px;
     height: 100px;
+    line-height: 95px;
+    font-size: 50px;
     margin: 5px;
     background-color: #90CAF9;
     border-radius: 25px;
@@ -14,6 +16,10 @@
 
 #left-button {
 	margin-right: 50px;
+}
+
+.btn:hover {
+	cursor: pointer;
 }
 
 #wrapper {
