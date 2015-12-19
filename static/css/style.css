@@ -1,17 +1,23 @@
 .square{
-    width:100px;
-    height:100px;
-    text-align:center;
+    float: left;
+    width: 100px;
+    height: 100px;
+    line-height: 95px;
+    font-size: 50px;
+    margin: 5px;
+    background-color: #90CAF9;
+    border-radius: 25px;
+    text-align: center;
 }
 
-.v{
-    border-left:1px solid #000;
-    border-right:1px solid #000;
+.centered {
+	display: inline-block;
 }
 
-.h{
-    border-top:1px solid #000;
-    border-bottom:1px solid #000;
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    text-align: center;
 }
 
 .overlay {
@@ -45,10 +51,4 @@
   top: 20%;
   height: 60%;
   font-size: 80px;
-}
-
-#history {
-	position: fixed;
-	top: 0%;
-	left: 80%;
 }

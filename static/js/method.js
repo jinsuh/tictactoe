@@ -76,7 +76,7 @@ socket.on("selection", function(squareLoc){
 });
 
 function init() {
-	var squares = document.getElementsByTagName("td");
+	var squares = document.getElementsByClassName("square");
 	for (var s = 0; s < squares.length; s++) {
 		var square = squares[s];
     	$(square).data("position", new Array(Math.floor(s / 3), s % 3));
@@ -127,7 +127,7 @@ function checkWinner(squareLoc, player) {
 }
 
 function clickGrid(enableClick) {
-	var squares = document.getElementsByTagName("td");
+	var squares = document.getElementsByClassName("square");
 	for (var s = 0; s < squares.length; s++) {
 		var square = squares[s];
 		if (enableClick) {

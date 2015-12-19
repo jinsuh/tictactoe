@@ -11,12 +11,17 @@ var express = require("express"),
 	moves = new Array();
 
 var url = 'mongodb://localhost:27017/matches';
+var state = {
+  db: null,
+}
 mongoClient.connect(url, function(err, db) {
   if (err) {
   	console.log(err);
   }
-  console.log("Connected correctly to mongodb server.");
-  db.close();
+  else {
+  	console.log("Connected correctly to mongodb server.");	
+  	state.db = db;
+  }
 });
 
 app.engine("html", ejs.renderFile);
@@ -32,21 +37,14 @@ app.get("/history", function(req, res) {
 });
 
 app.post("/history", function(req, res) {
-	mongoClient.connect(url, function(err, db) {
-	  	if (err) {
-	  		console.log(err);
-	  	}
-	  	else {
-	  		db.collection('games').find().toArray(function(err, data) {
-	  			if (err) {
-	  				console.log(err);
-	  			}
-	  			else {
-	  				res.send(data);
-            		db.close();	
-	  			}
-        	});
-	  	}
+	state.db.collection('games').find().toArray(function(err, data) {
+		if (err) {
+			console.log(err);
+			res.status(500).send(err);
+		}
+		else {
+			res.send(data);
+		}
 	});
 });
 
@@ -62,18 +60,10 @@ io.on("connection", function(socket) {
 		io.emit("selection", squareLoc);
 	});
 	socket.on("end", function() {
-		mongoClient.connect(url, function(err, db) {
-  			if (err) {
-  				console.log(err);
-  			}
-  			else {
-  				insertGame(db, game, moves, function() {
-      				db.close();
-      				game = game + 1;
-					moves = new Array();
-  				});		
-  			}
-		});
+		insertGame(state.db, game, moves, function() {
+      		game = game + 1;
+			moves = new Array();
+  		});		
 		player = 0;
 	});
 	socket.on("start", function() {
@@ -88,8 +78,6 @@ var server = http.listen(port, function() {
 });
 
 var insertGame = function(db, game, moves, callback) {
-	console.log(moves);
-	console.log(game);
    	db.collection('games').insertOne({
     	"game" : game,
     	"moves" : moves
@@ -98,7 +86,7 @@ var insertGame = function(db, game, moves, callback) {
 	    	console.log(err);
 	    }
 	    else {
-	    	console.log("Inserted a document into the restaurants collection.");
+	    	console.log("Inserted a document into the collection.");
 	    	callback(result);
 	    }
   	});

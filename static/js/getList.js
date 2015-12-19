@@ -30,6 +30,8 @@ $.post("/history", function(data) {
         $('.sidebar-nav li').removeClass('selected');
         $(this).addClass('selected');
         currentMoveList = movesByGame[($(this).index())];
+        var gameTitle = document.getElementById("game-title");
+        gameTitle.innerText = $(this).text();
         currPosition = 0;
         clearBoard();
         e.preventDefault();
