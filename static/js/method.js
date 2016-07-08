@@ -37,8 +37,6 @@ socket.on("start", function() {
 socket.on("selection", function(squareLoc){
 	moveCount = moveCount + 1;
     var id = squareLoc[0] * 3 + squareLoc[1];
-    console.log(moveCount);
-    console.log(size * size);
     var square = document.getElementById(id.toString());
     if (firstPlayerTurn) {
     	var icon = "X";
